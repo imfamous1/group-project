@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KINETIC // Brand Identity & Guidelines 2026</title>
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #121212;
+            --text: #f4f4f0;
+            --muted: #7a7a7a;
+            --accent: #ff3c00;
+            --border: rgba(244, 244, 240, 0.14);
+            --font-display: 'Arial Black', 'Impact', system-ui, -apple-system, sans-serif;
+            --font-sans: 'Helvetica Neue', 'Arial', system-ui, -apple-system, sans-serif;
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #f4f4f0;
+            --surface: #e8e8e3;
+            --text: #0a0a0a;
+            --muted: #666660;
+            --border: rgba(10, 10, 10, 0.14);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-sans);
+            transition: background-color 0.5s var(--ease), color 0.5s var(--ease);
+        }
+
+        body {
+            overflow-x: hidden;
+            line-height: 1.4;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hovered {
+            width: 64px;
+            height: 64px;
+            background: #ffffff;
+        }
+
+        /* Grid Overlay */
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+            padding: 0 4vw;
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .grid-overlay.active {
+            opacity: 1;
+        }
+
+        .grid-col {
+            background: rgba(255, 60, 0, 0.08);
+            border-left: 1px dashed rgba(255, 60, 0, 0.3);
+            border-right: 1px dashed rgba(255, 60, 0, 0.3);
+            height: 100%;
+        }
+
+        /* Header / Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 10, 10, 0.78);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+        }
+
+        [data-theme="light"] header {
+            background: rgba(244, 244, 240, 0.82);
+        }
+
+        .brand-mark {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            display: inline-block;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s var(--ease);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-pill {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 8px 14px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            transition: all 0.3s var(--ease);
+        }
+
+        .btn-pill:hover, .btn-pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* Sections General */
+        section {
+            padding: 120px 4vw;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-meta {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 60px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-top: 140px;
+            padding-bottom: 40px;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 9.5vw, 9.5rem);
+            font-weight: 900;
+            line-height: 0.92;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+        }
+
+        .hero-title span {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title span i {
+            font-style: normal;
+            display: inline-block;
+            transform: translateY(110%);
+            animation: revealUp 1s var(--ease) forwards;
+        }
+
+        .hero-title span:nth-child(2) i { animation-delay: 0.15s; color: var(--accent); }
+        .hero-title span:nth-child(3) i { animation-delay: 0.3s; }
+
+        @keyframes revealUp {
+            to { transform: translateY(0); }
+        }
+
+        .hero-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: end;
+            margin-top: 60px;
+        }
+
+        .hero-desc {
+            font-size: 1.25rem;
+            max-width: 480px;
+            color: var(--muted);
+        }
+
+        .hero-specs {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-align: right;
+            line-height: 1.8;
+        }
+
+        /* Marquee */
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 24px 0;
+            background: var(--accent);
+            color: #0a0a0a;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .marquee-inner {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* 01. Logo Construction */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .logo-stage {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            height: 460px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-svg {
+            width: 240px;
+            height: 240px;
+            transition: transform 0.6s var(--ease);
+        }
+
+        .logo-stage:hover .logo-svg {
+            transform: scale(1.06);
+        }
+
+        .construction-lines {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .logo-stage.show-guides .construction-lines {
+            opacity: 1;
+        }
+
+        .logo-sidebar {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 32px;
+        }
+
+        .logo-sidebar h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+
+        .logo-sidebar p {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        /* 02. Interactive Color Palette */
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .color-card {
+            height: 360px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.4s var(--ease);
+            position: relative;
+        }
+
+        .color-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .color-info {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .color-name {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .copy-badge {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border: 1px solid currentColor;
+            border-radius: 100px;
+            align-self: flex-start;
+        }
+
+        /* 03. Typography Sandbox */
+        .type-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin-bottom: 32px;
+            align-items: center;
+        }
+
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+        }
+
+        input[type="range"] {
+            accent-color: var(--accent);
+            width: 180px;
+        }
+
+        .type-sandbox {
+            font-family: var(--font-display);
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            padding: 40px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            outline: none;
+            min-height: 240px;
+            word-break: break-word;
+            transition: border-color 0.3s;
+        }
+
+        .type-sandbox:focus {
+            border-color: var(--accent);
+        }
+
+        /* 04. Motion & Tokens */
+        .motion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .motion-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 300px;
+        }
+
+        .track {
+            width: 100%;
+            height: 60px;
+            border: 1px dashed var(--border);
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            overflow: hidden;
+        }
+
+        .runner {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .motion-box:hover .runner {
+            transform: translateX(calc(100% + 240px));
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: var(--accent);
+            color: #fff;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            padding: 14px 24px;
+            border-radius: 4px;
+            transform: translateY(150%);
+            transition: transform 0.4s var(--ease);
+            z-index: 9500;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
+
+        /* Reveal on scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            padding: 60px 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        @media (max-width: 900px) {
+            .logo-grid, .palette-grid, .motion-grid, .hero-footer {
+                grid-template-columns: 1fr;
+            }
+            nav { display: none; }
+            .hero-specs { text-align: left; }
+            * { cursor: auto; }
+            .cursor { display: none; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- 12-Column Swiss Grid Overlay -->
+    <div class="grid-overlay" id="gridOverlay">
+        <div class="grid-col"></div><div class="grid-col"></div><div class="grid-col"></div>
+        <div class="grid-col"></div><div class="grid-col"></div><div class="grid-col"></div>
+        <div class="grid-col"></div><div class="grid-col"></div><div class="grid-col"></div>
+        <div class="grid-col"></div><div class="grid-col"></div><div class="grid-col"></div>
+    </div>
+
+    <!-- Navigation -->
+    <header>
+        <div class="brand-mark hover-target">
+            <span class="brand-dot"></span> KINETIC® SYS.04
+        </div>
+        <nav>
+            <a href="#logo" class="hover-target">01. Знак</a>
+            <a href="#colors" class="hover-target">02. Палитра</a>
+            <a href="#typography" class="hover-target">03. Типографика</a>
+            <a href="#motion" class="hover-target">04. Моушн</a>
+        </nav>
+        <div class="controls">
+            <button class="btn-pill hover-target" id="toggleGrid">Сетка [G]</button>
+            <button class="btn-pill hover-target" id="toggleTheme">Тема</button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1 class="hero-title">
+            <span><i>VISUAL</i></span>
+            <span><i>IDENTITY</i></span>
+            <span><i>SYSTEM 26</i></span>
+        </h1>
+        <div class="hero-footer">
+            <p class="hero-desc">
+                Интерактивное руководство по визуальному языку KINETIC. Модульная архитектура, швейцарская точность и кинетическая типографика для цифровых продуктов.
+            </p>
+            <div class="hero-specs">
+                ВЕРСИЯ ДОКУМЕНТА: 4.2.0<br>
+                МОДУЛЬНАЯ СЕТКА: 12 COL / 20PX GUTTER<br>
+                СТАТУС: АКТУАЛЬНО ДЛЯ ПРОДАКШЕНА
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+        <div class="marquee-inner">
+            KINETIC DESIGN SYSTEM — SWISS PRECISION — BRUTALIST CLARITY — INTERACTIVE GUIDELINES — 2026 EDITION —&nbsp;
+            KINETIC DESIGN SYSTEM — SWISS PRECISION — BRUTALIST CLARITY — INTERACTIVE GUIDELINES — 2026 EDITION —&nbsp;
+        </div>
+    </div>
+
+    <!-- 01. Logo Construction -->
+    <section id="logo" class="reveal">
+        <div class="section-meta">
+            <span>01 // ФИРМЕННЫЙ ЗНАК И МОДУЛЬНАЯ СЕТКА</span>
+            <span>ПРОПОРЦИИ 1:1 / ОХРАННОЕ ПОЛЕ 2X</span>
+        </div>
+        <div class="logo-grid">
+            <div class="logo-stage hover-target" id="logoStage">
+                <svg class="logo-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g class="construction-lines" stroke="#ff3c00" stroke-width="0.75" stroke-dasharray="3 3">
+                        <rect x="20" y="20" width="160" height="160"/>
+                        <line x1="0" y1="100" x2="200" y2="100"/>
+                        <line x1="100" y1="0" x2="100" y2="200"/>
+                        <line x1="20" y1="20" x2="180" y2="180"/>
+                        <line x1="180" y1="20" x2="20" y2="180"/>
+                        <circle cx="100" cy="100" r="80"/>
+                    </g>
+                    <path d="M40 40H80V160H40V40Z" fill="currentColor"/>
+                    <path d="M90 100L150 40H185L125 100L185 160H150L90 100Z" fill="#ff3c00"/>
+                </svg>
+            </div>
+            <div class="logo-sidebar">
+                <div>
+                    <h3>Геометрия знака</h3>
+                    <p>Логотип построен на пересечении базового квадрата и диагонального вектора 45°. Минимальный размер в вебе — 24px по высоте.</p>
+                </div>
+                <button class="btn-pill hover-target" id="toggleGuides">Показать сетку построения</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02. Interactive Color Palette -->
+    <section id="colors" class="reveal">
+        <div class="section-meta">
+            <span>02 // ЦВЕТОВАЯ СИСТЕМА</span>
+            <span>НАЖМИТЕ НА КАРТОЧКУ ДЛЯ КОПИРОВАНИЯ HEX</span>
+        </div>
+        <div class="palette-grid">
+            <div class="color-card hover-target" data-hex="#0A0A0A" style="background:#0A0A0A; color:#F4F4F0;">
+                <span class="copy-badge">Копировать</span>
+                <div class="color-info">
+                    <div class="color-name">Obsidian Void</div>
+                    HEX: #0A0A0A<br>RGB: 10, 10, 10<br>РОЛЬ: Основной фон
+                </div>
+            </div>
+            <div class="color-card hover-target" data-hex="#F4F4F0" style="background:#F4F4F0; color:#0A0A0A;">
+                <span class="copy-badge">Копировать</span>
+                <div class="color-info">
+                    <div class="color-name">Swiss Paper</div>
+                    HEX: #F4F4F0<br>RGB: 244, 244, 240<br>РОЛЬ: Контрастный текст
+                </div>
+            </div>
+            <div class="color-card hover-target" data-hex="#FF3C00" style="background:#FF3C00; color:#0A0A0A;">
+                <span class="copy-badge">Копировать</span>
+                <div class="color-info">
+                    <div class="color-name">Kinetic Signal</div>
+                    HEX: #FF3C00<br>RGB: 255, 60, 0<br>РОЛЬ: Акцент и триггеры
+                </div>
+            </div>
+            <div class="color-card hover-target" data-hex="#7A7A7A" style="background:#7A7A7A; color:#0A0A0A;">
+                <span class="copy-badge">Копировать</span>
+                <div class="color-info">
+                    <div class="color-name">Concrete Mute</div>
+                    HEX: #7A7A7A<br>RGB: 122, 122, 122<br>РОЛЬ: Вторичные метаданные
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03. Typography Sandbox -->
+    <section id="typography" class="reveal">
+        <div class="section-meta">
+            <span>03 // ТИПОГРАФИЧЕСКАЯ ПЕСОЧНИЦА</span>
+            <span>DISPLAY + GROTESK + MONOSPACE</span>
+        </div>
+        <div class="type-controls">
+            <div class="slider-group">
+                <label for="fontSize">КЕГЛЬ: <span id="sizeVal">64</span>PX</label>
+                <input type="range" id="fontSize" min="24" max="110" value="64" class="hover-target">
+            </div>
+            <div class="slider-group">
+                <label for="letterSpacing">ТРЕКИНГ: <span id="trackVal">-0.02</span>EM</label>
+                <input type="range" id="letterSpacing" min="-0.06" max="0.2" step="0.01" value="-0.02" class="hover-target">
+            </div>
+            <div class="slider-group">
+                <label>ГАРНИТУРА</label>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn-pill active font-switch hover-target" data-font="var(--font-display)">Display</button>
+                    <button class="btn-pill font-switch hover-target" data-font="var(--font-sans)">Sans</button>
+                    <button class="btn-pill font-switch hover-target" data-font="var(--font-mono)">Mono</button>
+                </div>
+            </div>
+        </div>
+        <div class="type-sandbox hover-target" id="sandbox" contenteditable="true" spellcheck="false">
+            Кликните сюда и введите свой текст для проверки ритма и контраста шрифтовой пары.
+        </div>
+    </section>
+
+    <!-- 04. Motion & Tokens -->
+    <section id="motion" class="reveal">
+        <div class="section-meta">
+            <span>04 // ФИЗИКА ДВИЖЕНИЯ И ТОКЕНЫ</span>
+            <span>CUBIC-BEZIER(0.16, 1, 0.3, 1)</span>
+        </div>
+        <div class="motion-grid">
+            <div class="motion-box hover-target">
+                <div>
+                    <h3 style="font-family:var(--font-display); margin-bottom:8px;">Экспоненциальное торможение</h3>
+                    <p style="color:var(--muted); font-size:0.9rem;">Наведите курсор на карточку, чтобы протестировать фирменную кривую ускорения интерфейса.</p>
+                </div>
+                <div class="track">
+                    <div class="runner"></div>
+                </div>
+            </div>
+            <div class="motion-box" style="font-family:var(--font-mono); font-size:0.85rem; line-height:1.9;">
+                <div>
+                    --ease-primary: cubic-bezier(0.16, 1, 0.3, 1);<br>
+                    --duration-fast: 300ms;<br>
+                    --duration-reveal: 800ms;<br>
+                    --radius-card: 0px;<br>
+                    --radius-pill: 100px;
+                </div>
+                <div style="color:var(--muted); font-size:0.75rem;">
+                    * Все анимации используют аппаратное ускорение GPU (transform / opacity).
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <span>© 2026 KINETIC BRAND ARCHITECTURE</span>
+        <span>DESIGNED FOR HIGH-CONTRAST DIGITAL INTERFACES</span>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">HEX-код скопирован в буфер обмена</div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        const hoverTargets = document.querySelectorAll('.hover-target');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            target.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // Grid Overlay Toggle
+        const gridOverlay = document.getElementById('gridOverlay');
+        const toggleGridBtn = document.getElementById('toggleGrid');
+
+        function toggleGrid() {
+            gridOverlay.classList.toggle('active');
+            toggleGridBtn.classList.toggle('active');
+        }
+
+        toggleGridBtn.addEventListener('click', toggleGrid);
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'g' && document.activeElement.id !== 'sandbox') {
+                toggleGrid();
+            }
+        });
+
+        // Theme Switcher
+        const toggleThemeBtn = document.getElementById('toggleTheme');
+        toggleThemeBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+        });
+
+        // Logo Construction Guides
+        const logoStage = document.getElementById('logoStage');
+        const toggleGuidesBtn = document.getElementById('toggleGuides');
+        toggleGuidesBtn.addEventListener('click', () => {
+            logoStage.classList.toggle('show-guides');
+            toggleGuidesBtn.classList.toggle('active');
+            toggleGuidesBtn.textContent = logoStage.classList.contains('show-guides')
+                ? 'Скрыть сетку построения'
+                : 'Показать сетку построения';
+        });
+
+        // Color Palette Copy to Clipboard
+        const colorCards = document.querySelectorAll('.color-card');
+        const toast = document.getElementById('toast');
+
+        colorCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const hex = card.getAttribute('data-hex');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(hex);
+                }
+                toast.textContent = `Скопировано: ${hex}`;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2200);
+            });
+        });
+
+        // Typography Sandbox Controls
+        const sandbox = document.getElementById('sandbox');
+        const fontSizeInput = document.getElementById('fontSize');
+        const letterSpacingInput = document.getElementById('letterSpacing');
+        const sizeVal = document.getElementById('sizeVal');
+        const trackVal = document.getElementById('trackVal');
+        const fontSwitches = document.querySelectorAll('.font-switch');
+
+        fontSizeInput.addEventListener('input', (e) => {
+            sandbox.style.fontSize = e.target.value + 'px';
+            sizeVal.textContent = e.target.value;
+        });
+
+        letterSpacingInput.addEventListener('input', (e) => {
+            sandbox.style.letterSpacing = e.target.value + 'em';
+            trackVal.textContent = e.target.value;
+        });
+
+        fontSwitches.forEach(btn => {
+            btn.addEventListener('click', () => {
+                fontSwitches.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                sandbox.style.fontFamily = btn.getAttribute('data-font');
+            });
+        });
+
+        // Scroll Reveal Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
